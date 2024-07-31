@@ -1,10 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import useParticles from '../hooks/useParticles';
 
 const ParticleCanvas = ({ settings }) => {
   const canvasRef = useRef(null);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const particles = useParticles(settings, mousePosition);
+  const { particles, mousePosition } = useParticles(settings);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -14,6 +13,24 @@ const ParticleCanvas = ({ settings }) => {
     const resizeCanvas = () => {
       canvas.width = canvas.offsetWidth;
       canvas.height = canvas.offsetHeight;
+    };
+
+    const drawMonkey = (x, y) => {
+      ctx.fillStyle = 'brown';
+      ctx.beginPath();
+      ctx.arc(x, y, 10, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = 'beige';
+      ctx.beginPath();
+      ctx.arc(x, y + 5, 7, 0, Math.PI);
+      ctx.fill();
+
+      ctx.fillStyle = 'black';
+      ctx.beginPath();
+      ctx.arc(x - 4, y - 2, 2, 0, Math.PI * 2);
+      ctx.arc(x + 4, y - 2, 2, 0, Math.PI * 2);
+      ctx.fill();
     };
 
     const render = () => {
@@ -38,6 +55,11 @@ const ParticleCanvas = ({ settings }) => {
 
         ctx.fill();
       });
+
+      if (settings.cursorInteraction === 'monkey') {
+        drawMonkey(mousePosition.x, mousePosition.y);
+      }
+
       animationFrameId = window.requestAnimationFrame(render);
     };
 
@@ -45,22 +67,11 @@ const ParticleCanvas = ({ settings }) => {
     window.addEventListener('resize', resizeCanvas);
     render();
 
-    const handleMouseMove = (event) => {
-      const rect = canvas.getBoundingClientRect();
-      setMousePosition({
-        x: event.clientX - rect.left,
-        y: event.clientY - rect.top
-      });
-    };
-
-    canvas.addEventListener('mousemove', handleMouseMove);
-
     return () => {
       window.removeEventListener('resize', resizeCanvas);
       window.cancelAnimationFrame(animationFrameId);
-      canvas.removeEventListener('mousemove', handleMouseMove);
     };
-  }, [particles, settings]);
+  }, [particles, settings, mousePosition]);
 
   return <canvas ref={canvasRef} className="w-full h-full" />;
 };

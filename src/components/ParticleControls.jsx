@@ -75,13 +75,20 @@ const ParticleControls = ({ settings, onSettingsChange }) => {
         />
       </div>
 
-      <div className="flex items-center space-x-2">
-        <Switch
-          id="mouseReactive"
-          checked={settings.mouseReactive}
-          onCheckedChange={(checked) => handleChange('mouseReactive', checked)}
-        />
-        <Label htmlFor="mouseReactive">React to mouse movement</Label>
+      <div>
+        <Label htmlFor="cursorInteraction">Cursor Interaction</Label>
+        <Select value={settings.cursorInteraction} onValueChange={(value) => handleChange('cursorInteraction', value)}>
+          <SelectTrigger>
+            <SelectValue placeholder="Select cursor interaction" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="none">None</SelectItem>
+            <SelectItem value="follow">Follow cursor</SelectItem>
+            <SelectItem value="repel">Repel cursor</SelectItem>
+            <SelectItem value="inception">Cursor inception of new particles</SelectItem>
+            <SelectItem value="monkey">Cursor is a monkey</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
     </div>
   );
