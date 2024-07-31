@@ -1,9 +1,10 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import useParticles from '../hooks/useParticles';
 
 const ParticleCanvas = ({ settings }) => {
   const canvasRef = useRef(null);
-  const particles = useParticles(settings);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const particles = useParticles(settings, mousePosition);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -44,9 +45,20 @@ const ParticleCanvas = ({ settings }) => {
     window.addEventListener('resize', resizeCanvas);
     render();
 
+    const handleMouseMove = (event) => {
+      const rect = canvas.getBoundingClientRect();
+      setMousePosition({
+        x: event.clientX - rect.left,
+        y: event.clientY - rect.top
+      });
+    };
+
+    canvas.addEventListener('mousemove', handleMouseMove);
+
     return () => {
       window.removeEventListener('resize', resizeCanvas);
       window.cancelAnimationFrame(animationFrameId);
+      canvas.removeEventListener('mousemove', handleMouseMove);
     };
   }, [particles, settings]);
 

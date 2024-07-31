@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 
 const useParticles = (settings) => {
   const [particles, setParticles] = useState([]);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
     const createParticle = () => ({
@@ -17,6 +18,16 @@ const useParticles = (settings) => {
       setParticles((prevParticles) =>
         prevParticles.map((particle) => {
           let { x, y, vx, vy } = particle;
+
+          if (settings.mouseReactive) {
+            const dx = mousePosition.x - x;
+            const dy = mousePosition.y - y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            if (distance < 100) {
+              vx += (dx / distance) * settings.speed * 0.1;
+              vy += (dy / distance) * settings.speed * 0.1;
+            }
+          }
 
           switch (settings.movement) {
             case 'linear':
@@ -44,8 +55,17 @@ const useParticles = (settings) => {
 
     const intervalId = setInterval(updateParticles, 16); // ~60 FPS
 
-    return () => clearInterval(intervalId);
-  }, [settings]);
+    const handleMouseMove = (event) => {
+      setMousePosition({ x: event.clientX, y: event.clientY });
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+
+    return () => {
+      clearInterval(intervalId);
+      window.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, [settings, mousePosition]);
 
   return particles;
 };

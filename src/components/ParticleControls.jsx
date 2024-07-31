@@ -2,6 +2,7 @@ import { Slider } from "@/components/ui/slider"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Input } from "@/components/ui/input"
+import { Switch } from "@/components/ui/switch"
 
 const ParticleControls = ({ settings, onSettingsChange }) => {
   const handleChange = (key, value) => {
@@ -72,6 +73,15 @@ const ParticleControls = ({ settings, onSettingsChange }) => {
           value={settings.color}
           onChange={(e) => handleChange('color', e.target.value)}
         />
+      </div>
+
+      <div className="flex items-center space-x-2">
+        <Switch
+          id="mouseReactive"
+          checked={settings.mouseReactive}
+          onCheckedChange={(checked) => handleChange('mouseReactive', checked)}
+        />
+        <Label htmlFor="mouseReactive">React to mouse movement</Label>
       </div>
     </div>
   );

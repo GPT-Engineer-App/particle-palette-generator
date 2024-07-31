@@ -10,6 +10,7 @@ const Index = () => {
     movement: 'random',
     shape: 'circle',
     color: '#ffffff',
+    mouseReactive: false,
   });
 
   return (
