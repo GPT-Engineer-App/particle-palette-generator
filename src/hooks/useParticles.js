@@ -22,8 +22,6 @@ const useParticles = (settings) => {
             case 'linear':
               x += vx;
               y += vy;
-              if (x < 0 || x > window.innerWidth) vx = -vx;
-              if (y < 0 || y > window.innerHeight) vy = -vy;
               break;
             case 'circular':
               const angle = Math.atan2(y - window.innerHeight / 2, x - window.innerWidth / 2);
@@ -35,6 +33,7 @@ const useParticles = (settings) => {
               y += (Math.random() - 0.5) * settings.speed;
           }
 
+          // Wrap around the screen
           x = (x + window.innerWidth) % window.innerWidth;
           y = (y + window.innerHeight) % window.innerHeight;
 
