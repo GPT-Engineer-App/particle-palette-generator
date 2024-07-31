@@ -102,26 +102,26 @@ export default ParticleCanvas;
 
   return (
     <div className="mt-4">
-      <div className="bg-gray-800 p-4 rounded-lg">
-        <pre className="text-sm text-white overflow-x-auto">
+      <div className="bg-gray-800 p-4 rounded-lg relative">
+        <Button
+          className="absolute top-2 right-2 z-10"
+          onClick={copyToClipboard}
+          disabled={copied}
+        >
+          {copied ? (
+            <>
+              <Check className="mr-2 h-4 w-4" /> Copied!
+            </>
+          ) : (
+            <>
+              <Clipboard className="mr-2 h-4 w-4" /> Copy Code
+            </>
+          )}
+        </Button>
+        <pre className="text-sm text-white overflow-auto max-h-[400px]">
           <code>{code}</code>
         </pre>
       </div>
-      <Button
-        className="mt-2"
-        onClick={copyToClipboard}
-        disabled={copied}
-      >
-        {copied ? (
-          <>
-            <Check className="mr-2 h-4 w-4" /> Copied!
-          </>
-        ) : (
-          <>
-            <Clipboard className="mr-2 h-4 w-4" /> Copy Code
-          </>
-        )}
-      </Button>
     </div>
   );
 };
